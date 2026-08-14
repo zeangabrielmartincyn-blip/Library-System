@@ -230,6 +230,69 @@
             color: var(--isu-green);
         }
 
+        .system-overview {
+            width: min(1200px, calc(100vw - 4rem));
+            align-self: center;
+            margin: 0 0 2rem;
+            padding: 1.25rem;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(11, 107, 58, 0.13);
+            border-radius: 12px;
+        }
+
+        .system-overview h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: var(--isu-deep);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .system-overview h2 i {
+            color: var(--isu-gold);
+        }
+
+        .system-overview > p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .overview-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .overview-feature {
+            padding: 0.65rem 0.5rem;
+            text-align: center;
+            background: rgba(11, 107, 58, 0.06);
+            border-radius: 8px;
+            color: var(--isu-deep);
+            line-height: 1.35;
+        }
+
+        .overview-feature i {
+            color: var(--isu-green);
+            font-size: 1rem;
+        }
+
+        .overview-feature h3 {
+            margin: 0.35rem 0 0.2rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .overview-feature p {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            line-height: 1.45;
+        }
+
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -274,6 +337,18 @@
             }
             .brand {
                 flex-direction: column;
+            }
+
+            .overview-features {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-feature i {
+                display: inline-block;
+            }
+
+            .system-overview {
+                width: calc(100vw - 2rem);
             }
         }
     </style>
@@ -335,8 +410,31 @@
                         </a>
                     @endforeach
                 </section>
+
             </div>
         </main>
+
+        <section class="system-overview" aria-labelledby="system-overview-title">
+            <h2 id="system-overview-title"><i class="fa-solid fa-circle-info"></i> System Overview</h2>
+            <p>BookTrack makes it simple to find library materials, manage reservations, and monitor borrowing activity in one secure place.</p>
+            <div class="overview-features">
+                <div class="overview-feature">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>Search Books</h3>
+                    <p>Find available library books quickly by title, author, or subject.</p>
+                </div>
+                <div class="overview-feature">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <h3>Reserve Titles</h3>
+                    <p>Reserve a book in advance and receive it when it becomes available.</p>
+                </div>
+                <div class="overview-feature">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <h3>Track Penalty</h3>
+                    <p>Check your borrowed books and keep track of their return dates.</p>
+                </div>
+            </div>
+        </section>
 
         <footer>
             <small>&copy; {{ date('Y') }} Isabela State University Library System</small>
@@ -344,4 +442,3 @@
     </div>
 </body>
 </html>
-
