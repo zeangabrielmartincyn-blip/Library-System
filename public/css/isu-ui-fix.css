@@ -1,0 +1,55 @@
+html {
+    font-size: 14px;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Shared responsive tightening for the library pages. */
+.topbar {
+    padding-block: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.brand img,
+.sidebar-header img,
+.welcome img {
+    width: clamp(3rem, 5vw, 3.75rem);
+    height: auto;
+}
+
+.pill,
+.logout,
+.action-button,
+.filter-button {
+    font-size: clamp(0.8rem, 0.4vw + 0.72rem, 0.95rem);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+}
+
+th,
+td {
+    padding: 0.5rem 0.75rem;
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+    }
+
+    main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: auto !important;
+    }
+}
+
