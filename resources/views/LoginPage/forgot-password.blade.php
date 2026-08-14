@@ -85,7 +85,11 @@
         </div>
 
         <h1>Forgot your password?</h1>
+<<<<<<< HEAD
         <p class="hint">Choose whether to receive a reset link by email or an OTP by mobile number.</p>
+=======
+        <p class="hint">Enter the email address on your account and we'll send you a link to reset your password.</p>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 
         @if (session('status'))
             <div class="status"><i class="fa-solid fa-circle-check"></i> {{ session('status') }}</div>
@@ -94,6 +98,7 @@
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
             <div class="field">
+<<<<<<< HEAD
                 <label for="method">Choose method</label>
                 <div style="display:flex;gap:.5rem;">
                     <label style="display:flex;gap:.4rem;align-items:center"><input type="radio" name="method" value="email" @checked(old('method', 'email') === 'email')> Email</label>
@@ -106,12 +111,19 @@
                 <div class="input-wrapper">
                     <i class="fa-solid fa-envelope"></i>
                     <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="you@example.com" autocomplete="email">
+=======
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="you@example.com" autocomplete="email" required autofocus>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 </div>
                 @error('email')
                     <p class="error"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
                 @enderror
             </div>
 
+<<<<<<< HEAD
             <div class="field" id="mobileField" style="display:none;">
                 <label for="mobile">Mobile Number</label>
                 <div class="input-wrapper">
@@ -133,6 +145,8 @@
                 @enderror
             </div>
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             <button type="submit">
                 <span>Send Reset Link</span>
                 <i class="fa-solid fa-paper-plane"></i>
@@ -141,6 +155,7 @@
 
         <a class="back-link" href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Back to login</a>
     </div>
+<<<<<<< HEAD
     <script>
         const methodRadios = document.querySelectorAll('input[name="method"]');
         const mobileField = document.getElementById('mobileField');
@@ -160,5 +175,7 @@
         }));
         toggleFields();
     </script>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 </body>
 </html>

@@ -10,7 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<<<<<<< HEAD
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     <style>
         :root {
             
@@ -251,10 +254,13 @@
             position: relative;
         }
 
+<<<<<<< HEAD
         .hidden {
             display: none;
         }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         label {
             display: block;
             margin-bottom: 0.35rem;
@@ -448,16 +454,28 @@
         $isGuest = strtolower($role) === 'guest';
         $isInstructor = strtolower($role) === 'instructor';
         $roleIdLabels = [
+<<<<<<< HEAD
+=======
+            'admin' => 'Admin ID',
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => 'Librarian ID',
             'instructor' => 'Instructor ID',
             'student' => 'Student ID',
         ];
         $roleIdExamples = [
+<<<<<<< HEAD
+=======
+            'admin' => 'e.g., ADMIN001',
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => 'e.g., LIB001',
             'instructor' => 'e.g., INS001',
             'student' => 'e.g., STU001',
         ];
         $roleLoginNotes = [
+<<<<<<< HEAD
+=======
+            'admin' => 'ADMIN001 / password',
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => 'LIB001 / password',
             'instructor' => 'INS001 / password',
             'student' => 'STU001 / password',
@@ -537,6 +555,7 @@
                             </div>
                         @endunless
 
+<<<<<<< HEAD
                         @if ($isGuest === false && strtolower($role) === 'student')
                             <div class="field" style="margin-top: .75rem;">
                                 <a class="forgot" href="{{ route('register.student.form') }}" style="display:inline-flex; align-items:center; gap:.35rem;">
@@ -552,13 +571,18 @@
                             @enderror
                         </div>
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                         <button type="submit">
                             <span>Login as {{ $role }}</span>
                             <i class="fa-solid fa-arrow-right-to-bracket"></i>
                         </button>
                     </form>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     
                 </div>
             </section>

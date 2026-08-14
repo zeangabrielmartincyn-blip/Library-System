@@ -24,6 +24,7 @@ class ChatController extends Controller
         ]);
 
         $user = Auth::user();
+<<<<<<< HEAD
         $role = $user?->role ?? 'guest';
         $userId = $user?->id;
 
@@ -58,6 +59,30 @@ class ChatController extends Controller
             return response()->json([
                 'reply' => 'Sorry, something went wrong while answering that. Please try again in a moment.',
             ]);
+=======
+        $intent = $this->detectIntent(strtolower($validated['message']));
+        $databaseContext = $this->buildDatabaseContext($validated['message'], $user?->role ?? 'user', $user?->id);
+        $directReply = $this->buildDirectReply($intent, $validated['message'], $databaseContext, $user?->role ?? 'user', $user?->id);
+
+        if ($directReply !== null) {
+            return response()->json([
+                'reply' => $directReply,
+            ]);
+        }
+
+        $context = [
+            'role' => $user?->role ?? 'user',
+            'user_name' => $user?->name ?? 'User',
+            'stats' => $this->library->stats(),
+            'database_context' => $databaseContext,
+        ];
+
+        try {
+            $reply = $this->chatBot->reply($validated['message'], $context);
+        } catch (\Throwable $e) {
+            report($e);
+            $reply = 'The chat service is not available right now. Please check the Gemini configuration.';
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         }
 
         return response()->json([
@@ -338,7 +363,11 @@ class ChatController extends Controller
             }
         }
 
+<<<<<<< HEAD
         if ($role === 'librarian') {
+=======
+        if ($role === 'admin' || $role === 'librarian') {
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             if ($wantsLoanInfo) {
                 $context['recent_loans'] = $this->library->activeLoans()->take(5)->map(fn ($item) => [
                     'isbn' => $item->isbn,
@@ -414,6 +443,7 @@ class ChatController extends Controller
         $clean = preg_replace('/^(show|find|search|get|look for|look up|find me|tell me about|what about|any|do you have|is there|list)\b/i', '', $clean) ?? $clean;
         $clean = preg_replace('/\b(book|books|catalog|catalogue|title|author|related|similar|topic|topics)\b/i', '', $clean) ?? $clean;
 
+<<<<<<< HEAD
         // Strip ordinary question/stop words. Without this, a generic question like
         // "how many books are available" leaves behind "how many are available",
         // which then fuzzy-matches any book whose description happens to contain
@@ -440,6 +470,9 @@ class ChatController extends Controller
         }
 
         return $clean;
+=======
+        return trim(preg_replace('/\s+/', ' ', $clean) ?? '');
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     protected function rankRelatedBooks(string $search): \Illuminate\Support\Collection

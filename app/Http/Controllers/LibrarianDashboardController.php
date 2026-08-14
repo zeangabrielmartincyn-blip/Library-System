@@ -2,24 +2,37 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Services\ChatBotService;
 use App\Services\LibraryRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\JsonResponse;
+=======
+use App\Models\User;
+use App\Services\LibraryRepository;
+use Illuminate\Support\Facades\Cache;
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class LibrarianDashboardController extends Controller
 {
+<<<<<<< HEAD
     public function __construct(protected LibraryRepository $library, protected ChatBotService $chatBot)
+=======
+    public function __construct(protected LibraryRepository $library)
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     {
         abort_unless(Auth::check() && Auth::user()?->role === 'librarian', 403);
     }
@@ -33,6 +46,7 @@ class LibrarianDashboardController extends Controller
         $bookStatusFilter = trim((string) $request->query('status', ''));
         $announcementSearch = trim((string) $request->query('announcement_search', ''));
         $announcementAudienceFilter = trim((string) $request->query('audience', ''));
+<<<<<<< HEAD
         $userSearch = trim((string) $request->query('user_search', ''));
         $userRoleFilter = trim((string) $request->query('user_role', ''));
         $fineStatusFilter = trim((string) $request->query('fine_status', ''));
@@ -57,6 +71,10 @@ class LibrarianDashboardController extends Controller
             'genreStats' => DB::table('books')->selectRaw('genre, COUNT(*) as count')->groupBy('genre')->orderByDesc('count')->get(),
             'topBorrowedBooks' => $this->library->mostBorrowedBooksForMonth($chartMonth, 6),
             'borrowTrend' => $this->library->borrowTrend(6),
+=======
+
+        return view('Dashboard.librariandashboard', [
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'stats' => $stats,
             'scanToken' => $scanToken,
             'scanPhoneUrl' => route('scan.show', $scanToken),
@@ -74,6 +92,10 @@ class LibrarianDashboardController extends Controller
             'announcementAudiences' => [
                 'public' => 'Public / Guest',
                 'all' => 'All Roles',
+<<<<<<< HEAD
+=======
+                'admin' => 'Admin Only',
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 'librarian' => 'Librarian Only',
                 'instructor' => 'Instructor Only',
                 'student' => 'Student Only',
@@ -122,11 +144,25 @@ class LibrarianDashboardController extends Controller
                 'returned_date' => $loan->returned_at ?? '---',
                 'status' => $loan->returned_at ? 'Returned' : (($loan->due_at < now()->toDateString()) ? 'Overdue' : 'Borrowed'),
             ]),
+<<<<<<< HEAD
+=======
+            'students' => $this->library->studentDirectory()->map(fn ($student) => [
+                'id' => $student->login_id,
+                'name' => $student->name,
+                'email' => $student->email,
+            ]),
+            'instructors' => $this->library->instructorDirectory()->map(fn ($instructor) => [
+                'id' => $instructor->login_id,
+                'name' => $instructor->name,
+                'email' => $instructor->email,
+            ]),
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'loginLogs' => $this->library->recentActivities(8, 'login'),
             'activityLogs' => $this->library->recentActivities(12),
         ]);
     }
 
+<<<<<<< HEAD
     public function chat(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -437,6 +473,8 @@ class LibrarianDashboardController extends Controller
         }, "{$type}.csv", ['Content-Type' => 'text/csv']);
     }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function addBook(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -459,6 +497,58 @@ class LibrarianDashboardController extends Controller
         return redirect()->route('dashboard.librarian')->with('status', 'Book saved successfully.');
     }
 
+<<<<<<< HEAD
+=======
+    public function addStudent(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'login_id' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6'],
+            'role' => ['nullable', 'in:student'],
+        ]);
+
+        $this->library->createUser([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'login_id' => $validated['login_id'],
+            'role' => 'student',
+            'password' => Hash::make($validated['password']),
+        ]);
+        $this->library->logActivity(Auth::id(), 'create_user', 'user', null, [
+            'role' => 'student',
+            'login_id' => $validated['login_id'],
+        ]);
+
+        return redirect()->route('dashboard.librarian')->with('status', 'Student registered successfully.');
+    }
+
+    public function addInstructor(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'login_id' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6'],
+        ]);
+
+        $this->library->createUser([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'login_id' => $validated['login_id'],
+            'role' => 'instructor',
+            'password' => Hash::make($validated['password']),
+        ]);
+        $this->library->logActivity(Auth::id(), 'create_user', 'user', null, [
+            'role' => 'instructor',
+            'login_id' => $validated['login_id'],
+        ]);
+
+        return redirect()->route('dashboard.librarian')->with('status', 'Instructor registered successfully.');
+    }
+
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function issue(Request $request, string $isbn): RedirectResponse
     {
         $validated = $request->validate([
@@ -524,7 +614,11 @@ class LibrarianDashboardController extends Controller
         $validated = $request->validate([
             'title'        => ['required', 'string', 'max:255'],
             'body'         => ['required', 'string'],
+<<<<<<< HEAD
             'audience'     => ['required', 'in:public,all,librarian,instructor,student,guest'],
+=======
+            'audience'     => ['required', 'in:public,all,admin,librarian,instructor,student,guest'],
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'published_at' => ['nullable', 'date'],
             'status'       => ['required', 'in:Draft,Published,Archived'],
         ]);
@@ -544,7 +638,11 @@ class LibrarianDashboardController extends Controller
         $validated = $request->validate([
             'title'        => ['required', 'string', 'max:255'],
             'body'         => ['required', 'string'],
+<<<<<<< HEAD
             'audience'     => ['required', 'in:public,all,librarian,instructor,student,guest'],
+=======
+            'audience'     => ['required', 'in:public,all,admin,librarian,instructor,student,guest'],
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'published_at' => ['nullable', 'date'],
             'status'       => ['required', 'in:Draft,Published,Archived'],
         ]);
@@ -596,4 +694,8 @@ class LibrarianDashboardController extends Controller
     {
         return 'book-scan:'.$token;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af

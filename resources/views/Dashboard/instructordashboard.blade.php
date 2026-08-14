@@ -383,6 +383,15 @@
         .badge.warn { background: rgba(230, 126, 34, 0.16); color: #b45c11; }
         .badge.danger { background: rgba(200, 40, 45, 0.13); color: var(--red); }
 
+<<<<<<< HEAD
+=======
+        .stars { display: inline-flex; align-items: center; gap: 0.1rem; white-space: nowrap; }
+        .star { color: var(--gold); font-size: 1rem; line-height: 1; }
+        .star.empty { color: var(--line); }
+        .rating-value { color: var(--text); font-weight: 600; font-size: 0.85rem; margin-left: 0.35rem; }
+        .muted { color: var(--muted); }
+
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         .empty-state,
         .flash {
             border: 1px solid var(--line);
@@ -767,6 +776,10 @@
                                                 <th>Available</th>
                                                 <th>Location</th>
                                                 <th>Status</th>
+<<<<<<< HEAD
+=======
+                                                <th>Rating</th>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -787,6 +800,23 @@
                                                         </span>
                                                     </td>
                                                     <td>
+<<<<<<< HEAD
+=======
+                                                        @php $avg = $book['avg_rating'] ?? null; @endphp
+                                                        @if ($avg)
+                                                            <div class="stars">
+                                                                @for ($s = 1; $s <= 5; $s++)
+                                                                    <span class="star {{ $s <= round($avg) ? '' : 'empty' }}">★</span>
+                                                                @endfor
+                                                                <span class="rating-value">{{ number_format($avg, 1) }}</span>
+                                                                <span class="muted">({{ $book['review_count'] ?? 0 }})</span>
+                                                            </div>
+                                                        @else
+                                                            <span class="muted">—</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                                         <div class="catalog-actions">
                                                             @if (!in_array($book['isbn'], $reservedIsbns ?? [], true))
                                                                  <form class="reserve-form" method="POST" action="{{ route('instructor.reserve', $book['isbn']) }}">
@@ -1097,11 +1127,15 @@
                                     </div>
                                     <div class="field">
                                         <label>New Password</label>
+<<<<<<< HEAD
                                         <input id="instructor-password" name="password" type="password" required>
                                         <div class="strength-meter" aria-live="polite" style="margin-top:0.45rem;">
                                             <div style="height:6px; border-radius:999px; background:#e2e8f0; overflow:hidden;"><div id="instructor-strength-fill" style="height:100%; width:0; border-radius:999px; background:#ef4444; transition:all 0.2s ease;"></div></div>
                                             <div id="instructor-strength-text" style="font-size:0.82rem; color:#64748b; margin-top:0.35rem;">Enter a password</div>
                                         </div>
+=======
+                                        <input name="password" type="password" required>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                     </div>
                                     <div class="field">
                                         <label>Confirm New Password</label>
@@ -1139,6 +1173,7 @@
     </div>
 </body>
 <script>
+<<<<<<< HEAD
     const instructorPasswordInput = document.getElementById('instructor-password');
     const instructorStrengthFill = document.getElementById('instructor-strength-fill');
     const instructorStrengthText = document.getElementById('instructor-strength-text');
@@ -1171,6 +1206,8 @@
     }
 </script>
 <script>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     const chatPanel = document.getElementById('chatPanel');
     const chatLauncher = document.getElementById('chatLauncher');
     const chatClose = document.getElementById('chatClose');
@@ -1219,7 +1256,11 @@
         appendChat('Thinking...', 'bot');
         const thinkingBubble = chatLog.lastElementChild;
         try {
+<<<<<<< HEAD
             const response = await fetch("{{ route('chat.send') }}", {
+=======
+            const response = await fetch('{{ route('chat.send') }}', {
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '' },
                 body: JSON.stringify({ message }),

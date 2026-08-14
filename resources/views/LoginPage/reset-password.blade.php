@@ -74,10 +74,13 @@
         .error { color: var(--isu-red); font-size: 0.85rem; margin-top: 0.4rem; }
         .back-link { display: inline-block; margin-top: 1.4rem; font-size: 0.9rem; color: var(--isu-green); text-decoration: none; font-weight: 600; }
         .back-link:hover { text-decoration: underline; }
+<<<<<<< HEAD
         .strength-meter { margin-top: 0.45rem; }
         .strength-bar { height: 6px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
         .strength-fill { height: 100%; width: 0; border-radius: 999px; background: #ef4444; transition: all 0.2s ease; }
         .strength-text { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem; }
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     </style>
 </head>
 <body>
@@ -94,6 +97,7 @@
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
 
+<<<<<<< HEAD
             @if(! empty($phone) && ! empty($phone_token))
                 <div class="field">
                     <label>Resetting for mobile</label>
@@ -117,6 +121,18 @@
                     @enderror
                 </div>
             @endif
+=======
+            <div class="field">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input id="email" name="email" type="email" value="{{ old('email', $email) }}" placeholder="you@example.com" autocomplete="email" required autofocus>
+                </div>
+                @error('email')
+                    <p class="error"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                @enderror
+            </div>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 
             <div class="field">
                 <label for="password">New Password</label>
@@ -124,10 +140,13 @@
                     <i class="fa-solid fa-lock"></i>
                     <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" required minlength="8">
                 </div>
+<<<<<<< HEAD
                 <div class="strength-meter" aria-live="polite">
                     <div class="strength-bar"><div id="strength-fill" class="strength-fill"></div></div>
                     <div id="strength-text" class="strength-text">Enter a password</div>
                 </div>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 @error('password')
                     <p class="error"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
                 @enderror
@@ -149,6 +168,7 @@
 
         <a class="back-link" href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Back to login</a>
     </div>
+<<<<<<< HEAD
     <script>
         const passwordInput = document.getElementById('password');
         const strengthFill = document.getElementById('strength-fill');
@@ -181,5 +201,7 @@
             renderStrength();
         }
     </script>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 </body>
 </html>

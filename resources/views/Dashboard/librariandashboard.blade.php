@@ -571,19 +571,25 @@
 
         .table-wrap {
             overflow-x: auto;
+<<<<<<< HEAD
             overflow-y: auto;
             max-height: min(58vh, 34rem);
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             border: 1px solid var(--line);
             border-radius: 1rem;
             background: rgba(255, 255, 255, 0.94);
         }
 
+<<<<<<< HEAD
         .table-wrap thead th {
             position: sticky;
             top: 0;
             z-index: 1;
         }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         table {
             width: 100%;
             border-collapse: collapse;
@@ -599,7 +605,11 @@
         }
 
         th {
+<<<<<<< HEAD
             background: #fbf1d9;
+=======
+            background: rgba(242, 200, 75, 0.14);
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             color: var(--green-deep);
             font-size: clamp(0.72rem, 0.35vw + 0.64rem, 0.85rem);
             letter-spacing: 0.08em;
@@ -708,6 +718,7 @@
             gap: 0.4rem;
         }
 
+<<<<<<< HEAD
         .strength-meter {
             display: grid;
             gap: 0.35rem;
@@ -734,6 +745,8 @@
             color: var(--muted);
         }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         .field.full {
             grid-column: 1 / -1;
         }
@@ -856,6 +869,37 @@
             padding: 1rem 1.15rem 1.15rem;
         }
 
+<<<<<<< HEAD
+=======
+        .chat-launcher {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 80;
+            border: 0;
+            border-radius: 999px;
+            padding: 0.95rem 1.1rem;
+            background: linear-gradient(135deg, var(--green), #0a7a43);
+            color: #fff;
+            font: inherit;
+            font-weight: 900;
+            box-shadow: 0 18px 36px rgba(11, 107, 58, 0.28);
+            cursor: pointer;
+        }
+        .chat-panel { position: fixed; right: clamp(0.9rem, 2vw, 1.25rem); bottom: clamp(4.8rem, 7vw, 5.6rem); z-index: 80; width: min(24rem, calc(100vw - 2rem)); max-height: min(72dvh, 42rem); display: none; grid-template-rows: auto 1fr auto; border: 1px solid var(--line); border-radius: 1.25rem; overflow: hidden; background: rgba(255,255,255,.98); box-shadow: 0 28px 80px rgba(6,66,37,.22); }
+        .chat-panel.open { display: grid; }
+        .chat-head { display: flex; justify-content: space-between; gap: 1rem; padding: clamp(0.95rem, 1.8vw, 1.05rem); background: linear-gradient(135deg, var(--green-deep), var(--green)); color: #fff; }
+        .chat-head h3, .chat-head p { margin: 0; }
+        .chat-head p { margin-top: .2rem; color: rgba(255,255,255,.8); font-size: clamp(0.78rem, 0.35vw + 0.7rem, 0.9rem); }
+        .chat-close { border: 0; border-radius: 999px; width: clamp(2rem, 3.5vw, 2.2rem); height: clamp(2rem, 3.5vw, 2.2rem); background: rgba(255,255,255,.14); color: #fff; font: inherit; font-size: 1.2rem; font-weight: 900; cursor: pointer; }
+        .chat-log { display: grid; gap: .75rem; padding: clamp(0.9rem, 1.6vw, 1rem); overflow: auto; background: radial-gradient(circle at top left, rgba(242,200,75,.10), transparent 12rem), #fbfcf8; }
+        .chat-bubble { max-width: 85%; border-radius: 1rem; padding: clamp(0.7rem, 1.3vw, 0.85rem); line-height: clamp(1.45, 1.1 + 0.15vw, 1.65); white-space: pre-wrap; }
+        .chat-bubble.user { margin-left: auto; background: linear-gradient(135deg, var(--green), #0a7a43); color: #fff; }
+        .chat-bubble.bot { background: #fff; color: var(--text); border: 1px solid var(--line); }
+        .chat-form { display: flex; gap: .6rem; padding: clamp(0.8rem, 1.6vw, 0.95rem); border-top: 1px solid var(--line); background: #fff; }
+        .chat-form textarea { min-height: clamp(2.8rem, 4vw, 3.2rem); max-height: 8rem; width: 100%; border: 1px solid var(--line); border-radius: .9rem; padding: .72rem .9rem; font: inherit; }
+
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         .modal-actions {
             display: flex;
             gap: 0.65rem;
@@ -875,11 +919,14 @@
             justify-content: space-between;
             gap: 1rem;
             padding: 0.9rem 0.95rem;
+<<<<<<< HEAD
             border-color: var(--line);
         }
 
         .mini-card--unread {
             border-color: var(--gold);
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         }
 
         .mini-card strong {
@@ -955,6 +1002,7 @@
             }
         }
 
+<<<<<<< HEAD
         .chat-launcher, .chat-close {
             position: fixed;
             right: 1.25rem;
@@ -983,6 +1031,8 @@
         .chat-form { display: flex; gap: .6rem; padding: .9rem; border-top: 1px solid var(--line); background: #fff; }
         .chat-form textarea { min-height: 3rem; max-height: 8rem; width: 100%; border: 1px solid var(--line); border-radius: .9rem; padding: .72rem .9rem; font: inherit; }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     </style>
 </head>
 <body>
@@ -1007,6 +1057,10 @@
         $announcementAudiences = $announcementAudiences ?? [
             'public' => 'Public / Guest',
             'all' => 'All Roles',
+<<<<<<< HEAD
+=======
+            'admin' => 'Admin Only',
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => 'Librarian Only',
             'instructor' => 'Instructor Only',
             'student' => 'Student Only',
@@ -1029,6 +1083,7 @@
         $loginLogs = collect($loginLogs);
         $activityLogs = collect($activityLogs);
 
+<<<<<<< HEAD
         $topBooksData = collect($topBorrowedBooks)->map(function ($book) {
             return [
                 'title' => $book->title,
@@ -1049,6 +1104,11 @@
                 'count' => $row->borrow_count,
             ];
         })->values();
+=======
+        $students = collect($students);
+
+        $instructors = collect($instructors);
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     @endphp
 
     <header class="topbar">
@@ -1077,7 +1137,11 @@
                     <img src="{{ asset('picture/ISU.jpg') }}" alt="ISU logo">
                     <div>
                         <h2>Librarian Panel</h2>
+<<<<<<< HEAD
                         <p>Manage books, people, circulation, fines, reports, and history from one clean workspace.</p>
+=======
+                        <p>Manage books, people, circulation, and history from one clean workspace.</p>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     </div>
                 </div>
 
@@ -1095,6 +1159,7 @@
                         <span>Add Book</span>
                         <span class="nav-badge">New</span>
                     </a>
+<<<<<<< HEAD
                     <a class="nav-link" href="#reviews" data-nav-link="reviews">
                         <span>Reviews</span>
                         <span class="nav-badge">{{ $allReviews->count() }}</span>
@@ -1102,6 +1167,15 @@
                     <a class="nav-link" href="#users" data-nav-link="users">
                         <span>Users</span>
                         <span class="nav-badge">{{ $users->count() }}</span>
+=======
+                    <a class="nav-link" href="#announcements" data-nav-link="announcements">
+                        <span>Announcements</span>
+                        <span class="nav-badge">{{ $announcements->count() }}</span>
+                    </a>
+                    <a class="nav-link" href="#notes" data-nav-link="notes">
+                        <span>Activity</span>
+                        <span class="nav-badge">{{ $activityLogs->count() }}</span>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     </a>
                     <a class="nav-link" href="#circulation" data-nav-link="circulation">
                         <span>Borrowed Books</span>
@@ -1115,6 +1189,7 @@
                         <span>Borrow History</span>
                         <span class="nav-badge">{{ $historyItems->count() }}</span>
                     </a>
+<<<<<<< HEAD
                     <a class="nav-link" href="#fines" data-nav-link="fines">
                         <span>Fines</span>
                         <span class="nav-badge">{{ $fines->count() }}</span>
@@ -1138,6 +1213,15 @@
                     <a class="nav-link" href="#notes" data-nav-link="notes">
                         <span>Activity</span>
                         <span class="nav-badge">{{ $activityLogs->count() }}</span>
+=======
+                    <a class="nav-link" href="#students" data-nav-link="students">
+                        <span>Students</span>
+                        <span class="nav-badge">{{ number_format((int) $stats['registered_students']) }}</span>
+                    </a>
+                    <a class="nav-link" href="#instructors" data-nav-link="instructors">
+                        <span>Instructors</span>
+                        <span class="nav-badge">{{ number_format((int) $stats['registered_instructors']) }}</span>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     </a>
                 </nav>
             </div>
@@ -1235,7 +1319,10 @@
                                             <th>Location</th>
                                             <th>Status</th>
                                             <th>Rating</th>
+<<<<<<< HEAD
                                             <th>Actions</th>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1267,12 +1354,15 @@
                                                         <span class="muted">—</span>
                                                     @endif
                                                 </td>
+<<<<<<< HEAD
                                                 <td>
                                                     <button class="btn action-link secondary js-edit-book" type="button" data-book="{{ json_encode($book) }}">Edit</button>
                                                     <form method="POST" action="{{ url('/dashboard/librarian/books').'/'.$book['isbn'] }}" style="display:inline-block;" onsubmit="return confirm('Delete this book?');">
                                                      
                                                     </form>
                                                 </td>
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -1282,6 +1372,130 @@
                     </div>
                 </section>
 
+<<<<<<< HEAD
+=======
+                <section class="cards-2 section section-anchor" id="students" data-section="students">
+                    <article class="panel" data-view="students">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Student Registry</h2>
+                                <p>Review active student accounts and key profile details.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-subtle">
+                            <div class="mini-list">
+                                @foreach ($students as $student)
+                                    <div class="mini-card">
+                                        <div>
+                                            <strong>{{ $student['name'] }}</strong>
+                                            <span>{{ $student['id'] }} | {{ $student['email'] }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="panel" data-view="add-student">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Add Student</h2>
+                                <p>Register a student with the same structure from the reference dashboard.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-subtle">
+                        <form class="stack-card" method="POST" action="{{ route('librarian.students.store') }}">
+                            @csrf
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label for="student-id">Student ID</label>
+                                    <input id="student-id" name="login_id" type="text" placeholder="24-12345" required>
+                                </div>
+                                <div class="field">
+                                    <label for="student-name">Full Name</label>
+                                    <input id="student-name" name="name" type="text" placeholder="Student name" required>
+                                </div>
+                                <div class="field">
+                                    <label for="student-email">Email</label>
+                                    <input id="student-email" name="email" type="email" placeholder="student@isu.edu.ph" required>
+                                </div>
+                                <div class="field">
+                                    <label for="student-password">Password</label>
+                                    <input id="student-password" name="password" type="password" placeholder="Set password" required>
+                                </div>
+                            </div>
+                            <div class="hero-actions">
+                                <button class="btn btn-green" type="submit">Register Student</button>
+                            </div>
+                        </form>
+                    </div>
+                </article>
+            </section>
+
+                <section class="cards-2 section section-anchor" id="instructors" data-section="instructors">
+                    <article class="panel" data-view="instructors">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Instructor Registry</h2>
+                                <p>Review active instructor accounts and department details.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-subtle">
+                            <div class="mini-list">
+                                @foreach ($instructors as $instructor)
+                                    <div class="mini-card">
+                                        <div>
+                                            <strong>{{ $instructor['name'] }}</strong>
+                                            <span>{{ $instructor['id'] }} | {{ $instructor['email'] }}</span>
+                                        </div>
+                                        <span>Active</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="panel" data-view="add-instructor">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Add Instructor</h2>
+                                <p>Create an instructor record with the same clean structure.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel-subtle">
+                        <form class="stack-card" method="POST" action="{{ route('librarian.instructors.store') }}">
+                            @csrf
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label for="instructor-id">Instructor ID</label>
+                                    <input id="instructor-id" name="login_id" type="text" placeholder="24-20001" required>
+                                </div>
+                                <div class="field">
+                                    <label for="instructor-name">Full Name</label>
+                                    <input id="instructor-name" name="name" type="text" placeholder="Professor name" required>
+                                </div>
+                                <div class="field">
+                                    <label for="instructor-email">Email</label>
+                                    <input id="instructor-email" name="email" type="email" placeholder="instructor@isu.edu.ph" required>
+                                </div>
+                                <div class="field full">
+                                    <label for="instructor-password">Password</label>
+                                    <input id="instructor-password" name="password" type="password" placeholder="Set password" required>
+                                </div>
+                            </div>
+                            <div class="hero-actions">
+                                <button class="btn btn-gold" type="submit">Register Instructor</button>
+                            </div>
+                        </form>
+                        </div>
+                    </article>
+                </section>
+
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 <section class="panel section section-anchor" id="announcements" data-section="announcements">
                     <div class="panel-header">
                         <div>
@@ -1616,7 +1830,11 @@
 
                         <div class="stack-card">
                             <h3>Reservation Queue</h3>
+<<<<<<< HEAD
                             
+=======
+                            <p>Issue or decline the books students have already reserved.</p>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                             @if (empty($reservations) || $reservations->isEmpty())
                                 <div class="empty-state">No active reservations are waiting for issue right now.</div>
                             @else
@@ -1663,6 +1881,7 @@
                     </div>
                 </section>
 
+<<<<<<< HEAD
                 <section class="panel section section-anchor" id="users" data-section="users">
                     <div class="panel-header">
                         <div>
@@ -2055,12 +2274,18 @@
                     @endif
                 </section>
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 <section class="panel section section-anchor" id="notes" data-section="notes">
                     <div class="panel-header">
                         <div>
                             <h2>Activity</h2>
+<<<<<<< HEAD
 
                             <p>Recent actions and login events across the library system.</p>
+=======
+                            <p>Recent actions and login events, presented in the same style as the admin dashboard.</p>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                         </div>
                     </div>
 
@@ -2179,6 +2404,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="modal-backdrop" id="editBookModal" aria-hidden="true">
         <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editBookModalTitle">
             <div class="modal-header">
@@ -2243,16 +2469,23 @@
         </div>
     </div>
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     <button class="chat-launcher" type="button" id="chatLauncher">Chat with AI</button>
     <div class="chat-panel" id="chatPanel" aria-hidden="true">
         <div class="chat-head">
             <div>
                 <h3>AI Library Assistant</h3>
+<<<<<<< HEAD
                 <p>Ask about books, users, fines, reports, or dashboard actions.</p>
+=======
+                <p>Ask about books, users, loans, fines, or announcements.</p>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             </div>
             <button class="chat-close" type="button" id="chatClose">&times;</button>
         </div>
         <div class="chat-log" id="chatLog">
+<<<<<<< HEAD
             <div class="chat-bubble bot">Hi, I&rsquo;m your library assistant. Ask me anything about the system.</div>
         </div>
         <form class="chat-form" id="chatForm">
@@ -2272,6 +2505,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.2/dist/quagga.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+=======
+            <div class="chat-bubble bot">Hi, I’m your library assistant. Ask me anything about the system.</div>
+        </div>
+        <form class="chat-form" id="chatForm">
+            <textarea id="chatInput" placeholder="Type your question..." required></textarea>
+            <button class="btn btn-ghost" type="button" id="chatNew">New Chat</button>
+            <button class="btn btn-green" type="submit" id="chatSend">Send</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.2/dist/quagga.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     <script>
         (() => {
             const sections = Array.from(document.querySelectorAll("[data-section]"));
@@ -2279,8 +2525,11 @@
             const groups = Array.from(document.querySelectorAll("[data-group]"));
             const announcementModal = document.getElementById("announcementModal");
             const announcementModalForm = document.getElementById("announcementModalForm");
+<<<<<<< HEAD
             const editBookModal = document.getElementById("editBookModal");
             const editBookModalForm = document.getElementById("editBookModalForm");
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             const toggles = Array.from(document.querySelectorAll("[data-group-toggle]"));
             const librarianBookForm = document.getElementById('librarianBookCreateForm');
             const librarianBookIsbn = document.getElementById('librarian-book-isbn');
@@ -2292,10 +2541,15 @@
             const retryLibrarianBarcodeScanner = document.getElementById('retryLibrarianBarcodeScanner');
             const librarianBarcodeHelp = document.getElementById('librarianBarcodeHelp');
             const phoneScanQr = document.getElementById('phoneScanQr');
+<<<<<<< HEAD
             const dashboardDataElement = document.getElementById('librarian-dashboard-data');
             const dashboardData = dashboardDataElement ? JSON.parse(dashboardDataElement.textContent || '{}') : {};
             const scanToken = dashboardData.scanToken;
             const scanPhoneUrl = dashboardData.scanPhoneUrl;
+=======
+            const scanToken = @json($scanToken ?? null);
+            const scanPhoneUrl = @json($scanPhoneUrl ?? null);
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             let librarianBarcodeScannerRunning = false;
             let librarianBarcodeScannerStopping = false;
             let librarianBarcodeScannerLastError = '';
@@ -2306,11 +2560,19 @@
                 overview: "overview",
                 inventory: "inventory",
                 "add-book": "add-book",
+<<<<<<< HEAD
+=======
+                students: "students",
+                "add-student": "students",
+                instructors: "instructors",
+                "add-instructor": "instructors",
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 announcements: "announcements",
                 notes: "notes",
                 circulation: "circulation",
                 "issue-book": "issue-book",
                 history: "history",
+<<<<<<< HEAD
                 users: "users",
                 fines: "fines",
                 reviews: "reviews",
@@ -2334,6 +2596,23 @@
                 charts: "workspace",
                 reports: "workspace",
                 notifications: "workspace",
+=======
+            };
+
+            const groupMap = {
+                overview: "overview",
+                inventory: "books",
+                "add-book": "books",
+                students: "users",
+                "add-student": "users",
+                instructors: "users",
+                "add-instructor": "users",
+                announcements: "announcements",
+                notes: "insights",
+                circulation: "circulation",
+                "issue-book": "circulation",
+                history: "circulation",
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             };
 
             const setAnnouncementField = (selector, value) => {
@@ -2372,6 +2651,7 @@
                 announcementModalForm.action = "";
             };
 
+<<<<<<< HEAD
             const setEditBookField = (selector, value) => {
                 if (!editBookModalForm) {
                     return;
@@ -2412,6 +2692,8 @@
                 editBookModalForm.action = "";
             };
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             const normalizeIsbn = (value) => (value || "").replace(/[^0-9Xx]/g, "").toUpperCase();
 
             const fetchBookLookup = async (isbn) => {
@@ -2741,6 +3023,7 @@
                 });
             });
 
+<<<<<<< HEAD
             document.querySelectorAll(".js-edit-book").forEach((button) => {
                 button.addEventListener("click", () => {
                     const payload = button.dataset.book;
@@ -2760,6 +3043,8 @@
                 });
             }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             if (announcementModal) {
                 announcementModal.addEventListener("click", (event) => {
                     if (event.target === announcementModal) {
@@ -2768,6 +3053,7 @@
                 });
             }
 
+<<<<<<< HEAD
             window.addEventListener("hashchange", fromHash);
             window.addEventListener("load", fromHash);
             fromHash();
@@ -2956,3 +3242,78 @@
 </script>
 </body>
 </html>
+=======
+            const chatPanel = document.getElementById('chatPanel');
+            const chatLauncher = document.getElementById('chatLauncher');
+            const chatClose = document.getElementById('chatClose');
+            const chatForm = document.getElementById('chatForm');
+            const chatInput = document.getElementById('chatInput');
+            const chatLog = document.getElementById('chatLog');
+            const chatSend = document.getElementById('chatSend');
+            const chatNew = document.getElementById('chatNew');
+            const chatStateKey = 'librarya_librarian_chat_state';
+            const appendChat = (text, role) => { const bubble = document.createElement('div'); bubble.className = `chat-bubble ${role}`; bubble.textContent = text; chatLog.appendChild(bubble); chatLog.scrollTop = chatLog.scrollHeight; };
+            const saveChatState = () => {
+                const messages = Array.from(chatLog.querySelectorAll('.chat-bubble')).map((bubble) => ({ role: bubble.classList.contains('user') ? 'user' : 'bot', text: bubble.textContent ?? '' }));
+                localStorage.setItem(chatStateKey, JSON.stringify({ open: chatPanel.classList.contains('open'), messages }));
+            };
+            const restoreChatState = () => {
+                try {
+                    const raw = localStorage.getItem(chatStateKey);
+                    if (!raw) return;
+                    const state = JSON.parse(raw);
+                    if (Array.isArray(state.messages) && state.messages.length) {
+                        chatLog.innerHTML = '';
+                        state.messages.forEach((item) => appendChat(item.text, item.role === 'user' ? 'user' : 'bot'));
+                    }
+                    if (state.open) toggleChat(true);
+                } catch (error) { localStorage.removeItem(chatStateKey); }
+            };
+            const startNewChat = () => {
+                chatLog.innerHTML = '';
+                appendChat('Hi, I am your library assistant. Ask me anything about the system.', 'bot');
+                chatPanel.classList.add('open');
+                chatPanel.setAttribute('aria-hidden', 'false');
+                localStorage.removeItem(chatStateKey);
+                saveChatState();
+            };
+            const toggleChat = (open) => { chatPanel.classList.toggle('open', open); chatPanel.setAttribute('aria-hidden', open ? 'false' : 'true'); if (open) chatInput.focus(); saveChatState(); };
+            chatLauncher?.addEventListener('click', () => toggleChat(!chatPanel.classList.contains('open')));
+            chatClose?.addEventListener('click', () => toggleChat(false));
+            chatNew?.addEventListener('click', startNewChat);
+            chatForm?.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const message = chatInput.value.trim();
+                if (!message) return;
+                appendChat(message, 'user');
+                chatInput.value = '';
+                chatSend.disabled = true;
+                appendChat('Thinking...', 'bot');
+                const thinkingBubble = chatLog.lastElementChild;
+                try {
+                    const response = await fetch('{{ route('chat.send') }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '' },
+                        body: JSON.stringify({ message }),
+                    });
+                    const data = await response.json();
+                    thinkingBubble.textContent = data.reply ?? 'No reply received.';
+                    saveChatState();
+                } catch (error) {
+                    thinkingBubble.textContent = 'Sorry, I could not reach the chat service.';
+                    saveChatState();
+                } finally {
+                    chatSend.disabled = false;
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                }
+            });
+
+            window.addEventListener("hashchange", fromHash);
+            window.addEventListener("load", fromHash);
+            fromHash();
+            restoreChatState();
+        })();
+    </script>
+</body>
+</html>
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -16,11 +17,20 @@ class ForgotPasswordController extends Controller
     public function __construct(protected SmsService $smsService)
     {
     }
+=======
+
+class ForgotPasswordController extends Controller
+{
+    /**
+     * Show the "enter your email" form.
+     */
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function showLinkRequestForm(): View
     {
         return view('LoginPage.forgot-password');
     }
 
+<<<<<<< HEAD
     public function sendResetLinkEmail(Request $request): RedirectResponse
     {
         $method = $request->input('method', 'email');
@@ -80,6 +90,13 @@ class ForgotPasswordController extends Controller
             return $this->sendOtpAndRedirect($user->mobile_number, $loginId, true);
         }
 
+=======
+    /**
+     * Send a reset link to the given email, if an account exists for it.
+     */
+    public function sendResetLinkEmail(Request $request): RedirectResponse
+    {
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         $request->validate(['email' => ['required', 'email']]);
 
         $status = Password::sendResetLink($request->only('email'));
@@ -89,6 +106,7 @@ class ForgotPasswordController extends Controller
             : back()->withErrors(['email' => 'We could not find an account with that email address.']);
     }
 
+<<<<<<< HEAD
     protected function sendOtpAndRedirect(string $mobile, string $loginId, bool $alsoEmailed = false): RedirectResponse
     {
         $otp = random_int(100000, 999999);
@@ -173,11 +191,17 @@ class ForgotPasswordController extends Controller
         ]);
     }
 
+=======
+    /**
+     * Show the "set a new password" form.
+     */
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function showResetForm(Request $request, string $token): View
     {
         return view('LoginPage.reset-password', [
             'token' => $token,
             'email' => $request->query('email'),
+<<<<<<< HEAD
             'phone' => $request->query('phone'),
             'login_id' => $request->query('login_id'),
             'phone_token' => $request->query('phone_token'),
@@ -216,6 +240,16 @@ class ForgotPasswordController extends Controller
             return redirect()->route('home')->with('status', 'Your password has been reset. You can now log in.');
         }
 
+=======
+        ]);
+    }
+
+    /**
+     * Handle the actual password reset.
+     */
+    public function reset(Request $request): RedirectResponse
+    {
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
@@ -233,4 +267,8 @@ class ForgotPasswordController extends Controller
             ? redirect()->route('home')->with('status', 'Your password has been reset. You can now log in.')
             : back()->withErrors(['email' => 'This password reset link is invalid or has expired.']);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af

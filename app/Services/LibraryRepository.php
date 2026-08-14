@@ -57,6 +57,7 @@ class LibraryRepository
      */
     protected function bookRatingsLookup(): array
     {
+<<<<<<< HEAD
         try {
             $hasBookId = Schema::hasColumn('book_reviews', 'book_id');
             $hasIsbn = Schema::hasColumn('book_reviews', 'book_isbn');
@@ -99,10 +100,32 @@ class LibraryRepository
                 }
 
                 $byIsbn[$isbn] = [
+=======
+        $hasBookId = Schema::hasColumn('book_reviews', 'book_id');
+        $hasIsbn = Schema::hasColumn('book_reviews', 'book_isbn');
+
+        $columns = array_values(array_filter([
+            $hasBookId ? 'book_id' : null,
+            $hasIsbn ? 'book_isbn' : null,
+            'rating',
+        ]));
+
+        $reviews = DB::table('book_reviews')->get($columns);
+
+        $isbnByBookId = DB::table('books')->pluck('isbn', 'id');
+
+        $byId = [];
+        $byIsbn = [];
+
+        foreach ($reviews->groupBy(fn ($r) => $hasBookId ? ($r->book_id ?? 'unmatched') : 'unmatched') as $bookId => $group) {
+            if ($bookId !== 'unmatched' && $bookId !== null) {
+                $byId[$bookId] = [
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     'avg_rating' => round((float) $group->avg('rating'), 1),
                     'review_count' => $group->count(),
                 ];
             }
+<<<<<<< HEAD
 
             return ['by_id' => $byId, 'by_isbn' => $byIsbn];
         } catch (\Throwable $e) {
@@ -110,6 +133,32 @@ class LibraryRepository
 
             return ['by_id' => [], 'by_isbn' => []];
         }
+=======
+        }
+
+        // Also index by normalized ISBN so reviews that only have book_isbn set
+        // (or whose book_id failed to backfill) still resolve to their book.
+        $byIsbnGroups = $reviews->groupBy(function ($r) use ($isbnByBookId, $hasBookId) {
+            if ($hasBookId && ! empty($r->book_id) && isset($isbnByBookId[$r->book_id])) {
+                return $this->normalizeIsbn($isbnByBookId[$r->book_id]);
+            }
+
+            return $this->normalizeIsbn($r->book_isbn ?? '');
+        });
+
+        foreach ($byIsbnGroups as $isbn => $group) {
+            if ($isbn === '') {
+                continue;
+            }
+
+            $byIsbn[$isbn] = [
+                'avg_rating' => round((float) $group->avg('rating'), 1),
+                'review_count' => $group->count(),
+            ];
+        }
+
+        return ['by_id' => $byId, 'by_isbn' => $byIsbn];
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     protected function normalizeIsbn(?string $isbn): string
@@ -247,7 +296,10 @@ class LibraryRepository
             'email' => $data['email'],
             'role' => $data['role'],
             'login_id' => $data['login_id'] ?? null,
+<<<<<<< HEAD
             'mobile_number' => $data['mobile_number'] ?? null,
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'status' => $data['status'] ?? 'active',
             'password' => $data['password'],
             'email_verified_at' => now(),
@@ -376,14 +428,21 @@ class LibraryRepository
 
         DB::transaction(function () use ($reservation, $processedBy) {
             $reservationQuantity = max(1, (int) ($reservation->quantity ?? 1));
+<<<<<<< HEAD
             $dueDate = $this->dueDateForUser((int) $reservation->user_id)->toDateString();
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 
             for ($i = 0; $i < $reservationQuantity; $i++) {
                 DB::table('loans')->insert([
                     'user_id' => $reservation->user_id,
                     'book_id' => $reservation->book_id,
                     'borrowed_at' => now(),
+<<<<<<< HEAD
                     'due_at' => $dueDate,
+=======
+                    'due_at' => now()->addDays(7)->toDateString(),
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     'status' => 'Borrowed',
                     'processed_by' => $processedBy,
                     'created_at' => now(),
@@ -558,7 +617,11 @@ class LibraryRepository
                 'user_id' => $userId,
                 'book_id' => $book->id,
                 'borrowed_at' => now(),
+<<<<<<< HEAD
                 'due_at' => $this->dueDateForUser($userId)->toDateString(),
+=======
+                'due_at' => now()->addDays(7)->toDateString(),
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 'status' => 'Borrowed',
                 'processed_by' => $processedBy,
                 'created_at' => now(),
@@ -588,6 +651,7 @@ class LibraryRepository
         };
     }
 
+<<<<<<< HEAD
     /**
      * How long a borrower gets to keep a book before it's due.
      * Instructors get a full semester (6 months), since their materials
@@ -604,6 +668,8 @@ class LibraryRepository
         };
     }
 
+=======
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function activeLoanCountForUser(int $userId): int
     {
         return DB::table('loans')
@@ -753,17 +819,29 @@ class LibraryRepository
 
     public function bookCount(): int
     {
+<<<<<<< HEAD
         return (int) DB::table('books')->sum('quantity');
+=======
+        return DB::table('books')->count();
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     public function availableBookCount(): int
     {
+<<<<<<< HEAD
         return (int) DB::table('books')->sum('available_quantity');
+=======
+        return DB::table('books')->where('available_quantity', '>', 0)->count();
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     public function userCounts(): array
     {
         return [
+<<<<<<< HEAD
+=======
+            'admin' => DB::table('users')->where('role', 'admin')->count(),
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => DB::table('users')->where('role', 'librarian')->count(),
             'instructor' => DB::table('users')->where('role', 'instructor')->count(),
             'student' => DB::table('users')->where('role', 'student')->count(),
@@ -833,7 +911,11 @@ class LibraryRepository
     {
         return DB::table('announcements')
             ->when($audience !== null && $audience !== '', function ($query) use ($audience, $includePublic) {
+<<<<<<< HEAD
                 if ($includePublic && in_array($audience, ['librarian', 'instructor', 'student', 'guest'], true)) {
+=======
+                if ($includePublic && in_array($audience, ['admin', 'librarian', 'instructor', 'student', 'guest'], true)) {
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     return $query->whereIn('audience', ['public', 'all', $audience]);
                 }
 
@@ -881,8 +963,13 @@ class LibraryRepository
     public function announcementRecipientIds(string $audience): Collection
     {
         $roles = match ($audience) {
+<<<<<<< HEAD
             'all' => ['librarian', 'instructor', 'student', 'guest'],
             'librarian', 'instructor', 'student', 'guest' => [$audience],
+=======
+            'all' => ['admin', 'librarian', 'instructor', 'student', 'guest'],
+            'admin', 'librarian', 'instructor', 'student', 'guest' => [$audience],
+>>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             default => ['guest'],
         };
 
