@@ -68,11 +68,11 @@
             </div>
             <div class="field">
                 <label for="mobile_number">Mobile number</label>
-                <input id="mobile_number" name="mobile_number" type="text" required value="{{ old('mobile_number') }}" placeholder="e.g. 09171234567">
+                <input id="mobile_number" name="mobile_number" type="text" value="{{ old('mobile_number') }}" placeholder="e.g. 09171234567">
             </div>
             <div class="field">
                 <label for="login_id">Student ID</label>
-                <input id="login_id" name="login_id" type="text" value="{{ old('login_id') }}" placeholder="xx-xxxxx" required maxlength="8" autocomplete="off">
+                <input id="login_id" name="login_id" type="text" value="{{ old('login_id') }}" placeholder="e.g. STU-REGISTER" required maxlength="21" autocomplete="off">
             </div>
             <div class="field">
                 <label for="password">Password</label>

@@ -57,7 +57,6 @@ class LibraryRepository
      */
     protected function bookRatingsLookup(): array
     {
-<<<<<<< HEAD
         try {
             $hasBookId = Schema::hasColumn('book_reviews', 'book_id');
             $hasIsbn = Schema::hasColumn('book_reviews', 'book_isbn');
@@ -100,32 +99,10 @@ class LibraryRepository
                 }
 
                 $byIsbn[$isbn] = [
-=======
-        $hasBookId = Schema::hasColumn('book_reviews', 'book_id');
-        $hasIsbn = Schema::hasColumn('book_reviews', 'book_isbn');
-
-        $columns = array_values(array_filter([
-            $hasBookId ? 'book_id' : null,
-            $hasIsbn ? 'book_isbn' : null,
-            'rating',
-        ]));
-
-        $reviews = DB::table('book_reviews')->get($columns);
-
-        $isbnByBookId = DB::table('books')->pluck('isbn', 'id');
-
-        $byId = [];
-        $byIsbn = [];
-
-        foreach ($reviews->groupBy(fn ($r) => $hasBookId ? ($r->book_id ?? 'unmatched') : 'unmatched') as $bookId => $group) {
-            if ($bookId !== 'unmatched' && $bookId !== null) {
-                $byId[$bookId] = [
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     'avg_rating' => round((float) $group->avg('rating'), 1),
                     'review_count' => $group->count(),
                 ];
             }
-<<<<<<< HEAD
 
             return ['by_id' => $byId, 'by_isbn' => $byIsbn];
         } catch (\Throwable $e) {
@@ -133,32 +110,6 @@ class LibraryRepository
 
             return ['by_id' => [], 'by_isbn' => []];
         }
-=======
-        }
-
-        // Also index by normalized ISBN so reviews that only have book_isbn set
-        // (or whose book_id failed to backfill) still resolve to their book.
-        $byIsbnGroups = $reviews->groupBy(function ($r) use ($isbnByBookId, $hasBookId) {
-            if ($hasBookId && ! empty($r->book_id) && isset($isbnByBookId[$r->book_id])) {
-                return $this->normalizeIsbn($isbnByBookId[$r->book_id]);
-            }
-
-            return $this->normalizeIsbn($r->book_isbn ?? '');
-        });
-
-        foreach ($byIsbnGroups as $isbn => $group) {
-            if ($isbn === '') {
-                continue;
-            }
-
-            $byIsbn[$isbn] = [
-                'avg_rating' => round((float) $group->avg('rating'), 1),
-                'review_count' => $group->count(),
-            ];
-        }
-
-        return ['by_id' => $byId, 'by_isbn' => $byIsbn];
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     protected function normalizeIsbn(?string $isbn): string
@@ -174,6 +125,203 @@ class LibraryRepository
     public function genres(): Collection
     {
         return DB::table('books')->distinct()->orderBy('genre')->pluck('genre')->values();
+    }
+
+    public function authors(): Collection
+    {
+        return DB::table('books')->whereNotNull('author')->where('author', '<>', '')->distinct()->orderBy('author')->pluck('author')->values();
+    }
+
+    public function publicationYears(): Collection
+    {
+        return DB::table('books')->whereNotNull('year_published')->distinct()->orderByDesc('year_published')->pluck('year_published')->values();
+    }
+
+    /**
+     * Public catalog query used by the guest dashboard. Filtering and sorting
+     * stay in SQL so the catalog page never loads the entire book table.
+     */
+    public function publicCatalogPage(array $filters = [], int $perPage = 8)
+    {
+        $search = trim((string) ($filters['search'] ?? ''));
+        $genre = trim((string) ($filters['genre'] ?? ''));
+        $availability = trim((string) ($filters['availability'] ?? ''));
+        $author = trim((string) ($filters['author'] ?? ''));
+        $year = $filters['year'] ?? null;
+        $sort = (string) ($filters['sort'] ?? 'title_asc');
+        $ratingColumnExists = Schema::hasColumn('book_reviews', 'book_id');
+
+        $query = DB::table('books')->select('books.*');
+
+        if ($sort === 'highest_rating') {
+            $ratings = DB::table('book_reviews')
+                ->when($ratingColumnExists, fn ($q) => $q->whereNotNull('book_id'))
+                ->select(
+                    $ratingColumnExists ? 'book_id' : 'book_isbn',
+                    DB::raw('AVG(rating) as rating_average'),
+                    DB::raw('COUNT(*) as rating_count')
+                )
+                ->groupBy($ratingColumnExists ? 'book_id' : 'book_isbn');
+
+            $query->leftJoinSub($ratings, 'catalog_ratings', function ($join) use ($ratingColumnExists) {
+                if ($ratingColumnExists) {
+                    $join->on('catalog_ratings.book_id', '=', 'books.id');
+                } else {
+                    $join->on('catalog_ratings.book_isbn', '=', 'books.isbn');
+                }
+            })->addSelect('catalog_ratings.rating_average', 'catalog_ratings.rating_count');
+        }
+
+        if ($sort === 'most_popular') {
+            $borrowCounts = DB::table('loans')
+                ->select('book_id', DB::raw('COUNT(*) as borrow_count'))
+                ->groupBy('book_id');
+
+            $query->leftJoinSub($borrowCounts, 'catalog_borrows', function ($join) {
+                $join->on('catalog_borrows.book_id', '=', 'books.id');
+            })->addSelect(DB::raw('COALESCE(catalog_borrows.borrow_count, 0) as borrow_count'));
+        }
+
+        $query
+            ->when($search !== '', function ($query) use ($search) {
+                $term = '%'.$search.'%';
+
+                return $query->where(function ($builder) use ($term) {
+                    $builder->where('books.title', 'like', $term)
+                        ->orWhere('books.author', 'like', $term)
+                        ->orWhere('books.isbn', 'like', $term)
+                        ->orWhere('books.genre', 'like', $term)
+                        ->orWhere('books.description', 'like', $term);
+                });
+            })
+            ->when($genre !== '', fn ($query) => $query->where('books.genre', $genre))
+            ->when($author !== '', fn ($query) => $query->where('books.author', 'like', '%'.$author.'%'))
+            ->when($year !== null && $year !== '', fn ($query) => $query->where('books.year_published', (int) $year))
+            ->when($availability === 'available', fn ($query) => $query->where('books.available_quantity', '>', 0))
+            ->when($availability === 'unavailable', fn ($query) => $query->where('books.available_quantity', '<=', 0));
+
+        match ($sort) {
+            'title_desc' => $query->orderByDesc('books.title'),
+            'newest' => $query->orderByDesc('books.year_published')->orderByDesc('books.created_at'),
+            'oldest' => $query->orderBy('books.year_published')->orderBy('books.created_at'),
+            'highest_rating' => $query->orderByDesc('catalog_ratings.rating_average')->orderByDesc('catalog_ratings.rating_count')->orderBy('books.title'),
+            'most_popular' => $query->orderByDesc('catalog_borrows.borrow_count')->orderBy('books.title'),
+            default => $query->orderBy('books.title'),
+        };
+
+        $page = $query->paginate(max(1, min(24, $perPage)))->withQueryString();
+        $ratings = $this->bookRatingsLookup();
+
+        $page->setCollection($page->getCollection()->map(function ($book) use ($ratings) {
+            $key = $ratings['by_id'][$book->id] ?? $ratings['by_isbn'][$this->normalizeIsbn($book->isbn)] ?? null;
+            $book->avg_rating = $key['avg_rating'] ?? ($book->rating_average ?? null);
+            $book->review_count = $key['review_count'] ?? (int) ($book->rating_count ?? 0);
+
+            return $this->formatBook($book);
+        }));
+
+        return $page;
+    }
+
+    public function publicBookDetails(string $isbn): ?array
+    {
+        $book = DB::table('books')->where('isbn', $isbn)->first();
+
+        if (! $book) {
+            return null;
+        }
+
+        $ratings = $this->bookRatingsLookup();
+        $key = $ratings['by_id'][$book->id] ?? $ratings['by_isbn'][$this->normalizeIsbn($book->isbn)] ?? null;
+        $book->avg_rating = $key['avg_rating'] ?? null;
+        $book->review_count = $key['review_count'] ?? 0;
+
+        return $this->formatBook($book);
+    }
+
+    public function newArrivals(int $limit = 8): Collection
+    {
+        return $this->mapBooksWithRatings(
+            DB::table('books')->orderByDesc('created_at')->orderByDesc('id')->limit(max(1, $limit))->get()
+        );
+    }
+
+    public function popularBooks(int $limit = 8): Collection
+    {
+        $borrowCounts = DB::table('loans')
+            ->select('book_id', DB::raw('COUNT(*) as borrow_count'))
+            ->groupBy('book_id');
+
+        $books = DB::table('books')
+            ->leftJoinSub($borrowCounts, 'catalog_borrows', function ($join) {
+                $join->on('catalog_borrows.book_id', '=', 'books.id');
+            })
+            ->select('books.*', DB::raw('COALESCE(catalog_borrows.borrow_count, 0) as borrow_count'))
+            ->whereNotNull('catalog_borrows.book_id')
+            ->orderByDesc('catalog_borrows.borrow_count')
+            ->orderBy('books.title')
+            ->limit(max(1, $limit))
+            ->get();
+
+        return $this->mapBooksWithRatings($books);
+    }
+
+    public function highlyRatedBooks(int $limit = 8): Collection
+    {
+        return $this->publicCatalogPage(['sort' => 'highest_rating'], max(1, $limit))->getCollection();
+    }
+
+    public function relatedBooks(string $isbn, int $limit = 4): Collection
+    {
+        $book = DB::table('books')->where('isbn', $isbn)->first(['id', 'author', 'genre']);
+
+        if (! $book) {
+            return collect();
+        }
+
+        $books = DB::table('books')
+            ->where('id', '!=', $book->id)
+            ->where(function ($query) use ($book) {
+                $query->where('genre', $book->genre)->orWhere('author', $book->author);
+            })
+            ->orderByRaw('CASE WHEN genre = ? THEN 0 ELSE 1 END', [$book->genre])
+            ->orderBy('title')
+            ->limit(max(1, $limit))
+            ->get();
+
+        return $this->mapBooksWithRatings($books);
+    }
+
+    public function publicAnnouncements(int $limit = 6): Collection
+    {
+        return DB::table('announcements')
+            ->whereIn('audience', ['public', 'all'])
+            ->whereIn('status', ['Published', 'published', 'Active', 'active'])
+            ->where(function ($query) {
+                $query->whereNull('published_at')->orWhereDate('published_at', '<=', now()->toDateString());
+            })
+            ->orderByDesc('published_at')
+            ->orderByDesc('created_at')
+            ->limit(max(1, $limit))
+            ->get();
+    }
+
+    public function libraryHours(): array
+    {
+        return (array) config('library.hours', []);
+    }
+
+    protected function mapBooksWithRatings(Collection $books): Collection
+    {
+        $ratings = $this->bookRatingsLookup();
+
+        return $books->map(function ($book) use ($ratings) {
+            $key = $ratings['by_id'][$book->id] ?? $ratings['by_isbn'][$this->normalizeIsbn($book->isbn)] ?? null;
+            $book->avg_rating = $key['avg_rating'] ?? null;
+            $book->review_count = $key['review_count'] ?? 0;
+
+            return $this->formatBook($book);
+        });
     }
 
     public function bookByIsbn(string $isbn)
@@ -296,10 +444,7 @@ class LibraryRepository
             'email' => $data['email'],
             'role' => $data['role'],
             'login_id' => $data['login_id'] ?? null,
-<<<<<<< HEAD
             'mobile_number' => $data['mobile_number'] ?? null,
-=======
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'status' => $data['status'] ?? 'active',
             'password' => $data['password'],
             'email_verified_at' => now(),
@@ -428,21 +573,14 @@ class LibraryRepository
 
         DB::transaction(function () use ($reservation, $processedBy) {
             $reservationQuantity = max(1, (int) ($reservation->quantity ?? 1));
-<<<<<<< HEAD
             $dueDate = $this->dueDateForUser((int) $reservation->user_id)->toDateString();
-=======
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 
             for ($i = 0; $i < $reservationQuantity; $i++) {
                 DB::table('loans')->insert([
                     'user_id' => $reservation->user_id,
                     'book_id' => $reservation->book_id,
                     'borrowed_at' => now(),
-<<<<<<< HEAD
                     'due_at' => $dueDate,
-=======
-                    'due_at' => now()->addDays(7)->toDateString(),
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     'status' => 'Borrowed',
                     'processed_by' => $processedBy,
                     'created_at' => now(),
@@ -617,11 +755,7 @@ class LibraryRepository
                 'user_id' => $userId,
                 'book_id' => $book->id,
                 'borrowed_at' => now(),
-<<<<<<< HEAD
                 'due_at' => $this->dueDateForUser($userId)->toDateString(),
-=======
-                'due_at' => now()->addDays(7)->toDateString(),
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 'status' => 'Borrowed',
                 'processed_by' => $processedBy,
                 'created_at' => now(),
@@ -651,7 +785,6 @@ class LibraryRepository
         };
     }
 
-<<<<<<< HEAD
     /**
      * How long a borrower gets to keep a book before it's due.
      * Instructors get a full semester (6 months), since their materials
@@ -668,8 +801,6 @@ class LibraryRepository
         };
     }
 
-=======
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     public function activeLoanCountForUser(int $userId): int
     {
         return DB::table('loans')
@@ -819,29 +950,18 @@ class LibraryRepository
 
     public function bookCount(): int
     {
-<<<<<<< HEAD
         return (int) DB::table('books')->sum('quantity');
-=======
-        return DB::table('books')->count();
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     public function availableBookCount(): int
     {
-<<<<<<< HEAD
         return (int) DB::table('books')->sum('available_quantity');
-=======
-        return DB::table('books')->where('available_quantity', '>', 0)->count();
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     public function userCounts(): array
     {
         return [
-<<<<<<< HEAD
-=======
             'admin' => DB::table('users')->where('role', 'admin')->count(),
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             'librarian' => DB::table('users')->where('role', 'librarian')->count(),
             'instructor' => DB::table('users')->where('role', 'instructor')->count(),
             'student' => DB::table('users')->where('role', 'student')->count(),
@@ -911,11 +1031,7 @@ class LibraryRepository
     {
         return DB::table('announcements')
             ->when($audience !== null && $audience !== '', function ($query) use ($audience, $includePublic) {
-<<<<<<< HEAD
-                if ($includePublic && in_array($audience, ['librarian', 'instructor', 'student', 'guest'], true)) {
-=======
                 if ($includePublic && in_array($audience, ['admin', 'librarian', 'instructor', 'student', 'guest'], true)) {
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     return $query->whereIn('audience', ['public', 'all', $audience]);
                 }
 
@@ -963,13 +1079,8 @@ class LibraryRepository
     public function announcementRecipientIds(string $audience): Collection
     {
         $roles = match ($audience) {
-<<<<<<< HEAD
-            'all' => ['librarian', 'instructor', 'student', 'guest'],
-            'librarian', 'instructor', 'student', 'guest' => [$audience],
-=======
             'all' => ['admin', 'librarian', 'instructor', 'student', 'guest'],
             'admin', 'librarian', 'instructor', 'student', 'guest' => [$audience],
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             default => ['guest'],
         };
 
@@ -1123,6 +1234,7 @@ class LibraryRepository
             'description' => $book->description,
             'avg_rating' => isset($book->avg_rating) && $book->avg_rating !== null ? round((float) $book->avg_rating, 1) : null,
             'review_count' => isset($book->review_count) ? (int) $book->review_count : 0,
+            'borrow_count' => isset($book->borrow_count) ? (int) $book->borrow_count : 0,
         ];
     }
 

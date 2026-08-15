@@ -2,19 +2,13 @@
 
 namespace App\Services;
 
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
 class ChatBotService
 {
     public function reply(string $message, array $context = []): string
     {
-<<<<<<< HEAD
-        return $this->fallbackReply($message, $context, 'Using the library database context only.');
-=======
         $apiKey = (string) config('services.gemini.api_key', env('GEMINI_API_KEY', ''));
         $models = array_values(array_filter(array_unique(array_merge(
             [(string) config('services.gemini.model', env('GEMINI_MODEL', 'gemini-3.5-flash'))],
@@ -132,7 +126,6 @@ PROMPT);
         }
 
         return 'Database context: '.json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     }
 
     protected function fallbackReply(string $message, array $context, string $reason): string
@@ -212,11 +205,7 @@ PROMPT);
             return implode(' ', $parts);
         }
 
-<<<<<<< HEAD
-        if (($context['role'] ?? 'user') === 'librarian') {
-=======
         if (in_array(($context['role'] ?? 'user'), ['admin', 'librarian'], true)) {
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
             if (str_contains($text, 'loan') || str_contains($text, 'borrow')) {
                 $recentLoans = $databaseContext['recent_loans'] ?? [];
                 if (is_iterable($recentLoans) && count($recentLoans) > 0) {

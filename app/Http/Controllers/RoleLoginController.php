@@ -122,16 +122,16 @@ class RoleLoginController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'mobile_number' => ['required', 'string', 'max:20', 'unique:users,mobile_number'],
+            'mobile_number' => ['nullable', 'string', 'max:20', 'unique:users,mobile_number'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'login_id' => ['required', 'regex:/^[A-Za-z0-9]{2}-[A-Za-z0-9]{5}$/', 'unique:users,login_id'],
+            'login_id' => ['required', 'regex:/^[A-Za-z0-9]{2,8}-[A-Za-z0-9]{3,12}$/', 'unique:users,login_id'],
         ]);
 
         $loginId = strtoupper($validated['login_id']);
         $userId = $this->library->createUser([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'mobile_number' => $validated['mobile_number'],
+            'mobile_number' => $validated['mobile_number'] ?? null,
             'login_id' => $loginId,
             'role' => 'student',
             'status' => 'inactive',
@@ -145,7 +145,7 @@ class RoleLoginController extends Controller
 
         $this->library->logActivity($userId, 'register_student', 'user', $userId, [
             'email' => $validated['email'],
-            'mobile_number' => $validated['mobile_number'],
+            'mobile_number' => $validated['mobile_number'] ?? null,
             'login_id' => $loginId,
         ]);
 

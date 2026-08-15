@@ -605,10 +605,6 @@
         $hasPatronSidebar = in_array($role, ['Student', 'Instructor'], true);
         $roleRoutePrefix = strtolower($role);
         $activePage = $dashboardPage ?? $studentPage ?? 'dashboard';
-<<<<<<< HEAD
-=======
-        $isAdmin = $role === 'Admin';
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
         $isGuest = $role === 'Guest';
     @endphp
 
@@ -961,15 +957,11 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="password" name="current_password" placeholder="Current password">
-<<<<<<< HEAD
                                 <input id="role-password" type="password" name="password" placeholder="New password">
                                 <div class="strength-meter" aria-live="polite" style="margin-top:0.35rem;">
                                     <div style="height:6px; border-radius:999px; background:#e2e8f0; overflow:hidden;"><div id="role-strength-fill" style="height:100%; width:0; border-radius:999px; background:#ef4444; transition:all 0.2s ease;"></div></div>
                                     <div id="role-strength-text" style="font-size:0.82rem; color:#64748b; margin-top:0.35rem;">Enter a password</div>
                                 </div>
-=======
-                                <input type="password" name="password" placeholder="New password">
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                                 <input type="password" name="password_confirmation" placeholder="Confirm new password">
                                 <button class="filter-button" type="submit">Update Password</button>
                             </form>
@@ -1046,193 +1038,7 @@
                     @endif
                 @endif
             @else
-<<<<<<< HEAD
                 @if ($isGuest)
-=======
-                @if ($isAdmin)
-                    @php
-                        $stats = $stats ?? [
-                            'books' => 0,
-                            'available_books' => 0,
-                            'reservations' => 0,
-                            'loans' => 0,
-                            'overdue' => 0,
-                            'users' => ['admin' => 0, 'librarian' => 0, 'instructor' => 0, 'student' => 0, 'guest' => 0],
-                        ];
-                        $users = collect($users);
-                        $books = collect($books);
-                        $announcements = collect($announcements);
-                        $activityLogs = collect($activityLogs);
-                    @endphp
-
-                    <section class="welcome">
-                        <img src="{{ asset('picture/ISU.jpg') }}" alt="ISU logo">
-                        <h1>Welcome, {{ auth()->user()->name ?? $role }}.</h1>
-                        <p>{{ $message }}</p>
-                    </section>
-
-                    <section class="student-stats" aria-label="Admin summary">
-                        <div class="stat-card">
-                            <strong>Books</strong>
-                            <span class="count">{{ $stats['books'] }}</span>
-                            <p>Entire library catalog.</p>
-                        </div>
-                        <div class="stat-card warning">
-                            <strong>Reservations</strong>
-                            <span class="count">{{ $stats['reservations'] }}</span>
-                            <p>Items waiting for pickup.</p>
-                        </div>
-                        <div class="stat-card danger">
-                            <strong>Overdue</strong>
-                            <span class="count">{{ $stats['overdue'] }}</span>
-                            <p>Loans past due date.</p>
-                        </div>
-                    </section>
-
-                    <section class="cards" aria-label="Admin modules">
-                        <div class="card">
-                            <strong>User Control</strong>
-                            <p>Change roles, enable or disable accounts, and keep login records clean.</p>
-                        </div>
-                        <div class="card">
-                            <strong>Book Oversight</strong>
-                            <p>Monitor stock, borrowing trends, and catalog updates across the library.</p>
-                        </div>
-                        <div class="card">
-                            <strong>Activity Review</strong>
-                            <p>See recent actions, announcements, and administrative audit information.</p>
-                        </div>
-                    </section>
-
-                    <h2 style="margin-top: 2rem; color: var(--isu-deep);">Users</h2>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($users as $user)
-                                    <tr>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ ucfirst($user->role) }}</td>
-                                        <td><span class="badge {{ ($user->status ?? 'active') === 'active' ? 'good' : 'danger' }}">{{ ucfirst($user->status ?? 'active') }}</span></td>
-                                        <td>
-                                            @if ($user->id !== auth()->id())
-                                                <form method="POST" action="{{ route('admin.users.role', $user->id) }}" style="display:grid; gap:0.4rem; margin-bottom:0.45rem;">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <select name="role" aria-label="Change role">
-                                                        <option value="admin" @selected($user->role === 'admin')>Admin</option>
-                                                        <option value="librarian" @selected($user->role === 'librarian')>Librarian</option>
-                                                        <option value="instructor" @selected($user->role === 'instructor')>Instructor</option>
-                                                        <option value="student" @selected($user->role === 'student')>Student</option>
-                                                        <option value="guest" @selected($user->role === 'guest')>Guest</option>
-                                                    </select>
-                                                    <button class="btn btn-blue" type="submit" style="min-height:2.4rem; padding:0.5rem 0.7rem;">Update Role</button>
-                                                </form>
-                                                <form method="POST" action="{{ route('admin.users.status', $user->id) }}">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button class="btn {{ ($user->status ?? 'active') === 'active' ? 'btn-red' : 'btn-green' }}" type="submit" style="min-height:2.4rem; padding:0.5rem 0.7rem;">
-                                                        {{ ($user->status ?? 'active') === 'active' ? 'Deactivate' : 'Activate' }}
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <span class="muted">Current account</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="5">No users found.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h2 style="margin-top: 2rem; color: var(--isu-deep);">Books</h2>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ISBN</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Genre</th>
-                                    <th>Qty</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($books as $book)
-                                    <tr>
-                                        <td>{{ $book['isbn'] }}</td>
-                                        <td>{{ $book['title'] }}</td>
-                                        <td>{{ $book['author'] }}</td>
-                                        <td>{{ $book['genre'] }}</td>
-                                        <td>{{ $book['quantity'] }}</td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="5">No books found.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h2 style="margin-top: 2rem; color: var(--isu-deep);">Activity</h2>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Action</th>
-                                    <th>User</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($activityLogs as $log)
-                                    <tr>
-                                        <td>{{ $log->action }}</td>
-                                        <td>{{ $log->user_name ?? 'System' }}</td>
-                                        <td>{{ $log->created_at }}</td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="3">No activity recorded yet.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h2 style="margin-top: 2rem; color: var(--isu-deep);">Announcements</h2>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Audience</th>
-                                    <th>Published</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($announcements as $announcement)
-                                    <tr>
-                                        <td>{{ $announcement->title }}</td>
-                                        <td>{{ ucfirst($announcement->audience) }}</td>
-                                        <td>{{ $announcement->published_at }}</td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="3">No announcements available.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                @elseif ($isGuest)
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                     @php
                         $books = collect($books);
                         $announcements = collect($announcements);
@@ -1249,11 +1055,7 @@
 
                     <section class="student-stats" aria-label="Guest library summary">
                         <div class="stat-card">
-<<<<<<< HEAD
                             <strong>Book Catalog</strong>
-=======
-                            <strong>Public Books</strong>
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                             <span class="count">{{ number_format((int) ($stats['books'] ?? 0)) }}</span>
                             <p>Browse the full public catalog with search and genre filtering.</p>
                         </div>
@@ -1484,11 +1286,7 @@
         const thinkingBubble = chatLog.lastElementChild;
 
         try {
-<<<<<<< HEAD
             const response = await fetch("{{ route('chat.send') }}", {
-=======
-            const response = await fetch('{{ route('chat.send') }}', {
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1509,7 +1307,6 @@
         }
     });
 
-<<<<<<< HEAD
     const rolePasswordInput = document.getElementById('role-password');
     const roleStrengthFill = document.getElementById('role-strength-fill');
     const roleStrengthText = document.getElementById('role-strength-text');
@@ -1541,8 +1338,6 @@
         renderRoleStrength();
     }
 
-=======
->>>>>>> 90d58030f54a63f10685836543225505ca11c2af
     restoreChatState();
 </script>
 </html>

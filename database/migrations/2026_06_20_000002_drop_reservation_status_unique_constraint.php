@@ -20,6 +20,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
+            // The composite unique index currently also supplies the index
+            // required by the user_id foreign key. Add that standalone index
+            // before removing the composite constraint on MySQL.
+            $table->index('user_id', 'reservations_user_id_index_for_foreign');
             $table->dropUnique('reservations_user_id_book_id_status_unique');
         });
     }
@@ -27,6 +31,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
+            $table->dropIndex('reservations_user_id_index_for_foreign');
             $table->unique(['user_id', 'book_id', 'status']);
         });
     }
