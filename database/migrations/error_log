@@ -1,0 +1,16 @@
+[21-Jun-2026 02:30:20 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/0001_01_01_000001_create_cache_table.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/0001_01_01_000001_create_cache_table.php on line 7
+[21-Jun-2026 02:31:25 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/0001_01_01_000000_create_users_table.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/0001_01_01_000000_create_users_table.php on line 7
+[21-Jun-2026 02:32:26 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/2026_05_31_000003_create_reservations_table.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/2026_05_31_000003_create_reservations_table.php on line 7
+[21-Jun-2026 02:33:27 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Migrations\Migration" not found in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/2026_06_17_000001_add_quantity_to_reservations_table.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/zeanmartin/public_html/isu.zeanmartin.online/librarya_System/database/migrations/2026_06_17_000001_add_quantity_to_reservations_table.php on line 7
