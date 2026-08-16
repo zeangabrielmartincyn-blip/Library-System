@@ -4,8 +4,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guest Dashboard | ISU Library System</title>
-    <link rel="stylesheet" href="{{ asset('css/guest-dashboard.css') }}">
+
+    <style>
+        :root {
+            --green: #064225;
+            --gold: #f2c84b;
+            --line: #d7e1d7;
+            --bg: #f4f8f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .guest-body {
+            margin: 0;
+            background: var(--bg);
+            color: #163021;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .guest-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 5%;
+            background: var(--green);
+            color: white;
+        }
+
+        .guest-brand,
+        .guest-actions {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .guest-brand {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .guest-brand img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .guest-brand small {
+            display: block;
+            opacity: .8;
+        }
+
+        .guest-button,
+        .primary-button,
+        .catalog-form button {
+            padding: .65rem .9rem;
+            border: 1px solid white;
+            border-radius: .5rem;
+            color: var(--green);
+            background: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .guest-shell {
+            width: min(1150px, 92%);
+            margin: 2rem auto;
+        }
+
+        .guest-hero,
+        .guest-panel,
+        .guest-stats article {
+            border: 1px solid var(--line);
+            border-radius: .8rem;
+            background: white;
+            padding: 1.25rem;
+        }
+
+        .guest-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-icon {
+            color: var(--green);
+            font-size: 5rem;
+        }
+
+        .primary-button,
+        .catalog-form button {
+            display: inline-block;
+            margin-top: .75rem;
+            border-color: var(--green);
+            color: white;
+            background: var(--green);
+        }
+
+        .guest-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .guest-stats span {
+            display: block;
+            margin: .5rem 0;
+            color: var(--green);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .guest-panel {
+            margin: 1rem 0;
+        }
+
+        .announcement {
+            padding: .75rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .catalog-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-bottom: 1rem;
+        }
+
+        .catalog-form input,
+        .catalog-form select {
+            flex: 1;
+            min-width: 180px;
+            padding: .7rem;
+            border: 1px solid var(--line);
+            border-radius: .5rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: .75rem;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+        }
+
+        th {
+            background: #fff8dc;
+        }
+
+        .muted {
+            color: #607267;
+        }
+
+        @media (max-width: 700px) {
+            .guest-topbar,
+            .guest-hero {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .guest-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body class="guest-body">
     <header class="guest-topbar">
         <a class="guest-brand" href="{{ route('dashboard.guest') }}">
@@ -19,11 +194,11 @@
         <div class="guest-actions">
             <a class="guest-button" href="{{ route('login.student') }}">Login</a>
             <a class="guest-button" href="{{ route('register.student.form') }}">Register</a>
+
             <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                 @csrf
                 <button class="guest-button" type="submit">Logout</button>
             </form>
-
         </div>
     </header>
 
@@ -35,6 +210,7 @@
                 <p>Browse the public catalog and library information.</p>
                 <a class="primary-button" href="{{ route('guest.catalog') }}">Explore Catalog</a>
             </div>
+
             <div class="hero-icon">▤</div>
         </section>
 
@@ -44,11 +220,13 @@
                 <span>{{ number_format($stats['books'] ?? 0) }}</span>
                 <p>Titles in the public catalog.</p>
             </article>
+
             <article>
                 <strong>Available Books</strong>
                 <span>{{ number_format($stats['available_books'] ?? 0) }}</span>
                 <p>Titles ready to borrow.</p>
             </article>
+
             <article>
                 <strong>Genres</strong>
                 <span>{{ number_format($stats['genres'] ?? 0) }}</span>
@@ -83,6 +261,7 @@
 
                 <select name="genre">
                     <option value="">All genres</option>
+
                     @foreach ($genres as $genre)
                         <option value="{{ $genre }}" @selected($selectedGenre === $genre)>
                             {{ $genre }}
@@ -106,6 +285,7 @@
                             <th>Rating</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @forelse ($books as $book)
                             <tr>
