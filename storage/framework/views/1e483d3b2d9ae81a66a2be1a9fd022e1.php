@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guest Dashboard | ISU Library System</title>
-    <link rel="stylesheet" href="{{ asset('css/guest-dashboard.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/guest-dashboard.css')); ?>">
 </head>
 <body class="guest-body">
     <header class="guest-topbar">
-        <a class="guest-brand" href="{{ route('dashboard.guest') }}">
-            <img src="{{ asset('picture/ISU.jpg') }}" alt="ISU logo">
+        <a class="guest-brand" href="<?php echo e(route('dashboard.guest')); ?>">
+            <img src="<?php echo e(asset('picture/ISU.jpg')); ?>" alt="ISU logo">
             <span>
                 <strong>ISU Library System</strong>
                 <small>Guest dashboard</small>
@@ -17,10 +17,10 @@
         </a>
 
         <div class="guest-actions">
-            <a class="guest-button" href="{{ route('login.student') }}">Login</a>
-            <a class="guest-button" href="{{ route('register.student.form') }}">Register</a>
-            <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
-                @csrf
+            <a class="guest-button" href="<?php echo e(route('login.student')); ?>">Login</a>
+            <a class="guest-button" href="<?php echo e(route('register.student.form')); ?>">Register</a>
+            <form method="POST" action="<?php echo e(route('logout')); ?>" style="margin: 0;">
+                <?php echo csrf_field(); ?>
                 <button class="guest-button" type="submit">Logout</button>
             </form>
 
@@ -33,7 +33,7 @@
                 <p class="muted">ISU Library System · Public access</p>
                 <h1>Welcome, Guest Reader</h1>
                 <p>Browse the public catalog and library information.</p>
-                <a class="primary-button" href="{{ route('guest.catalog') }}">Explore Catalog</a>
+                <a class="primary-button" href="<?php echo e(route('guest.catalog')); ?>">Explore Catalog</a>
             </div>
             <div class="hero-icon">▤</div>
         </section>
@@ -41,17 +41,17 @@
         <section class="guest-stats">
             <article>
                 <strong>Total Books</strong>
-                <span>{{ number_format($stats['books'] ?? 0) }}</span>
+                <span><?php echo e(number_format($stats['books'] ?? 0)); ?></span>
                 <p>Titles in the public catalog.</p>
             </article>
             <article>
                 <strong>Available Books</strong>
-                <span>{{ number_format($stats['available_books'] ?? 0) }}</span>
+                <span><?php echo e(number_format($stats['available_books'] ?? 0)); ?></span>
                 <p>Titles ready to borrow.</p>
             </article>
             <article>
                 <strong>Genres</strong>
-                <span>{{ number_format($stats['genres'] ?? 0) }}</span>
+                <span><?php echo e(number_format($stats['genres'] ?? 0)); ?></span>
                 <p>Categories in the collection.</p>
             </article>
         </section>
@@ -59,35 +59,36 @@
         <section class="guest-panel">
             <h2>Library Announcements</h2>
 
-            @forelse ($announcements as $announcement)
+            <?php $__empty_1 = true; $__currentLoopData = $announcements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $announcement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <article class="announcement">
-                    <h3>{{ $announcement->title }}</h3>
-                    <p>{{ $announcement->body }}</p>
-                    <small>{{ $announcement->published_at ?: $announcement->created_at }}</small>
+                    <h3><?php echo e($announcement->title); ?></h3>
+                    <p><?php echo e($announcement->body); ?></p>
+                    <small><?php echo e($announcement->published_at ?: $announcement->created_at); ?></small>
                 </article>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="muted">There are no public announcements right now.</p>
-            @endforelse
+            <?php endif; ?>
         </section>
 
         <section class="guest-panel">
             <h2>Explore Catalog</h2>
 
-            <form class="catalog-form" method="GET" action="{{ route('guest.catalog') }}">
+            <form class="catalog-form" method="GET" action="<?php echo e(route('guest.catalog')); ?>">
                 <input
                     type="search"
                     name="search"
-                    value="{{ $search }}"
+                    value="<?php echo e($search); ?>"
                     placeholder="Search title, author, ISBN, or genre"
                 >
 
                 <select name="genre">
                     <option value="">All genres</option>
-                    @foreach ($genres as $genre)
-                        <option value="{{ $genre }}" @selected($selectedGenre === $genre)>
-                            {{ $genre }}
+                    <?php $__currentLoopData = $genres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $genre): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($genre); ?>" <?php if($selectedGenre === $genre): echo 'selected'; endif; ?>>
+                            <?php echo e($genre); ?>
+
                         </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
                 <button type="submit">Search</button>
@@ -107,21 +108,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($books as $book)
+                        <?php $__empty_1 = true; $__currentLoopData = $books; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td>{{ $book['isbn'] }}</td>
-                                <td>{{ $book['title'] }}</td>
-                                <td>{{ $book['author'] }}</td>
-                                <td>{{ $book['genre'] }}</td>
-                                <td>{{ $book['location'] ?: 'Not specified' }}</td>
-                                <td>{{ $book['available_quantity'] > 0 ? 'Available' : 'Unavailable' }}</td>
-                                <td>{{ $book['avg_rating'] ? number_format($book['avg_rating'], 1).' / 5' : 'Not rated' }}</td>
+                                <td><?php echo e($book['isbn']); ?></td>
+                                <td><?php echo e($book['title']); ?></td>
+                                <td><?php echo e($book['author']); ?></td>
+                                <td><?php echo e($book['genre']); ?></td>
+                                <td><?php echo e($book['location'] ?: 'Not specified'); ?></td>
+                                <td><?php echo e($book['available_quantity'] > 0 ? 'Available' : 'Unavailable'); ?></td>
+                                <td><?php echo e($book['avg_rating'] ? number_format($book['avg_rating'], 1).' / 5' : 'Not rated'); ?></td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="7">No books matched your search.</td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -142,4 +143,4 @@
         </section>
     </main>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\system integ\librarya_System\resources\views/Dashboard/guestdashboard.blade.php ENDPATH**/ ?>

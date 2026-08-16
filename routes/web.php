@@ -33,6 +33,9 @@ Route::get('/scan/{token}', [BookScanController::class, 'showScanner'])->name('s
 Route::post('/scan/{token}', [BookScanController::class, 'submitBookScan'])->name('scan.submit');
 Route::get('/scan/{token}/status', [BookScanController::class, 'bookScanStatus'])->name('scan.status');
 
+Route::get('/dashboard/guest/books/{isbn}', [GuestDashboardController::class, 'bookDetails'])
+    ->name('guest.book-details');
+
 Route::middleware('auth')->group(function () {
     Route::post('/dashboard/chat', [ChatController::class, 'store'])->middleware('throttle:20,1')->name('chat.send');
     Route::get('/dashboard/student', [StudentDashboardController::class, 'dashboard'])->name('dashboard.student');

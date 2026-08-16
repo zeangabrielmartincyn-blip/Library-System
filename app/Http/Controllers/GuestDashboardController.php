@@ -49,6 +49,28 @@ class GuestDashboardController extends Controller
             ],
         ];
     }
+
+    public function bookDetails(string $isbn): View
+    {
+        $book = $this->library->publicBooks()->firstWhere('isbn', $isbn);
+
+        abort_unless($book, 404);
+
+        $relatedBooks = $this->library->publicBooks()
+            ->filter(fn ($item) =>
+                $item['isbn'] !== $book['isbn']
+                && ($item['genre'] === $book['genre'] || $item['author'] === $book['author'])
+            )
+            ->take(4)
+            ->values();
+
+        return view('Dashboard.guestdashboard', [
+            'guestPage' => 'details',
+            'bookDetails' => $book,
+            'bookReviews' => $this->library->reviewsForBook($isbn),
+            'relatedBooks' => $relatedBooks,
+        ]);
+    }
 }
 
 
